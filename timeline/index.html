@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Wedding Example using Time and Seconds</title>
+    <title>スケジュール表</title>
     <meta charset="utf-8">
     <meta name="description" content="TimelineJS Embed">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-touch-fullscreen" content="yes">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <!-- CSS-->
-    <link rel="stylesheet" href="../css/timeline.css?v1">
+    <link rel="stylesheet" href="css/timeline.css?v1">
     <!--FONT-->
-    <link rel="stylesheet" href="../css/fonts/font.default.css?v1">
+    <link rel="stylesheet" href="css/fonts/font.default.css?v1">
     <!-- Style-->
     <style>
       html, body {
@@ -33,10 +33,15 @@
   <body>
     <div id="timeline"></div>
     <!-- JavaScript-->
-    <script src="../js/timeline.js"></script>
+    <script src="js/timeline.js"></script>
     <script>
-      var timeline = new TL.Timeline('timeline', 'wedding.json', {
-      	ga_property_id: "UA-27829802-4"
+      //1cWqQBZCkX9GpzFtxCWHoqFXCHg-ylTVUWlnrdYMzKUI
+      //https://docs.google.com/spreadsheets/d/1OQCXIQoeMUbeIE3KdKijQhFvgit37m6Sy6S07gAE6fU/pubhtml
+      // var timeline = new TL.Timeline('timeline', '1OQCXIQoeMUbeIE3KdKijQhFvgit37m6Sy6S07gAE6fU', {
+      var timeline = new TL.Timeline('timeline', '1iQmnm8dh5BERWU4XVB3aIdxNCUO4jxwAI7vkcn8ZQQw', {
+        ga_property_id: "UA-27829802-4",
+      	debug:true,
+      	is_embed:true
       });
     </script>
   </body>
