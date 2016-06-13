@@ -3461,6 +3461,56 @@ TL.TimelineConfig = TL.Class.extend({
         return d;
     }
 
+    function extractGoogleEntryData_Bisan(item) {
+	var start_date = TL.Date.parseDate(item['gsx$開始日'].$t);
+	item['gsx$year'] = { $t: start_date.year };
+	item['gsx$month'] = { $t: start_date.month };
+	item['gsx$day'] = { $t: start_date.day };
+	item['gsx$time'] = { $t: item['gsx$開始時刻'].$t };
+	var end_date = TL.Date.parseDate(item['gsx$終了日'].$t);
+	item['gsx$endyear'] = { $t: end_date.year };
+	item['gsx$endmonth'] = { $t: end_date.month };
+	item['gsx$endday'] = { $t: end_date.day };
+	item['gsx$endtime'] = { $t: item['gsx$終了時刻'].$t };
+	item['gsx$headline'] = {
+	    $t: '【' + item['gsx$工程'].$t + '】' +
+		[item['gsx$担当者1'].$t,
+		 item['gsx$担当者2'].$t,
+		 item['gsx$担当者3'].$t,
+		 item['gsx$担当者4'].$t,
+		 item['gsx$担当者5'].$t].map(function(x){
+		     switch (x) {
+		     case '矢野': return '<span style="background: #40FF00;">' + x + "</span>";
+		     case '雅': return '<span style="background: #F7819F;">' + x + "</span>";
+		     case '木口': return '<span style="background: #81BEF7;">' + x + "</span>";
+		     case 'チョン': return '<span style="background: #FAAC58;">' + x + "</span>";
+		     case 'トマソ': return '<span style="background: #F2F5A9;">' + x + "</span>";
+		     case 'サポータ': return '<span style="background: #F4FA58;">' + x + "</span>";
+		     default: return x;
+		     }
+		 }).filter(function(s){return s;}).join(', ')
+	}
+	item['gsx$group'] = { $t: item['gsx$ユーザー名'].$t + " " + item['gsx$内容'].$t }
+	item['gsx$text'] = {
+	    $t: '<table rules="all" style="border-width: thin; border-style: solid; border-collapse: collapse;"><tr><th>ユーザー名</th><th>内容</th><th>数量</th><th>備考</th><tr>' +
+		"<tr><td>" + item['gsx$ユーザー名'].$t + "</td>" +
+		"<td>" + item['gsx$内容'].$t + "</td>" +
+		"<td>" + item['gsx$数量'].$t + "</td>" +
+		"<td><pre>" + item['gsx$備考'].$t + "</pre></td>" +
+		"</tr></table>"
+	}
+/*
+item['gsx$media'] = { $t: item['gsx$'].$t }
+item['gsx$mediacredit'] = { $t: item['gsx$'].$t }
+item['gsx$mediacaption'] = { $t: item['gsx$'].$t }
+item['gsx$mediathumbnail'] = { $t: item['gsx$'].$t }
+item['gsx$type'] = { $t: item['gsx$'].$t }
+item['gsx$background'] = { $t: item['gsx$'].$t }
+*/
+	var d = extractGoogleEntryData_V3(item);
+        return d;
+    }
+
     var getGoogleItemExtractor = function(data) {
         if (typeof data.feed.entry === 'undefined'
                 || data.feed.entry.length == 0) {
@@ -3486,7 +3536,7 @@ TL.TimelineConfig = TL.Class.extend({
             //     }
             // }
             return extractGoogleEntryData_V3;
-        }
+        } else return extractGoogleEntryData_Bisan;
         throw new TL.Error("invalid_data_format_err");
     }
 
@@ -9245,7 +9295,7 @@ TL.Slide = TL.Class.extend({
 
 		if(!this.has.title) {
             if (this.data.end_date) {
-                date_text = " &mdash; " + this.data.end_date.getDisplayDate(this.getLanguage());
+                date_text = " 〜 " + this.data.end_date.getDisplayDate(this.getLanguage());
             }
             if (this.data.start_date) {
                 date_text = this.data.start_date.getDisplayDate(this.getLanguage()) + date_text;
@@ -12375,7 +12425,7 @@ TL.Timeline = TL.Class.extend({
 			timenav_height_percentage: 	80,						// Overrides timenav height as a percentage of the screen
 			timenav_mobile_height_percentage: 40, 				// timenav height as a percentage on mobile devices
 			timenav_height_min: 		175,					// Minimum timenav height
-			marker_height_min: 			30,						// Minimum Marker Height
+			marker_height_min: 			20,						// Minimum Marker Height
 			marker_width_min: 			100,					// Minimum Marker Width
 			marker_padding: 			5,						// Top Bottom Marker Padding
 			start_at_slide: 			0,
@@ -12395,7 +12445,7 @@ TL.Timeline = TL.Class.extend({
 			slide_padding_lr: 			100,					// padding on slide of slide
 			slide_default_fade: 		"0%",					// landscape fade
 //			zoom_sequence: 				[0.5, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89], // Array of Fibonacci numbers for TimeNav zoom levels
-		    zoom_sequence: 				[0.2, 0.5, 2.5], // Array of TimeNav zoom levels [1week, 1month, 3month]
+		    zoom_sequence: 				[0.1, 0.2, 0.5, 2.5], // Array of TimeNav zoom levels [1week, 1month, 3month]
 			language: 					"ja",
 			ga_property_id: 			null,
 			track_events: 				['back_to_start','nav_next','nav_previous','zoom_in','zoom_out' ]
