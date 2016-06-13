@@ -10278,7 +10278,7 @@ TL.TimeNav = TL.Class.extend({
 
 	/*	TimeScale
 	================================================== */
-	_getTimeScale: function() {
+	_renewTimeScale: function() {
 		/* maybe the establishing config values (marker_height_min and max_rows) should be
 		separated from making a TimeScale object, which happens in another spot in this file with duplicate mapping of properties of this TimeNav into the TimeScale options object? */
 		// Set Max Rows
@@ -10297,12 +10297,13 @@ TL.TimeNav = TL.Class.extend({
 		if (this.max_rows < 1) {
 			this.max_rows = 1;
 		}
-		return new TL.TimeScale(this.config, {
+		this.timescale = new TL.TimeScale(this.config, {
             display_width: this._el.container.offsetWidth,
             screen_multiplier: this.options.scale_factor,
-            max_rows: this.max_rows
-
-		});
+            max_rows: this.max_rows});
+		this._groups = [];
+		this._createGroups();
+		return this.timescale;
 	},
 
 	_updateTimeScale: function(new_scale) {
@@ -10734,7 +10735,7 @@ TL.TimeNav = TL.Class.extend({
 		}
 		if (height && height != this.options.height) {
 			this.options.height = height;
-			this.timescale = this._getTimeScale();
+			this._renewTimeScale();
 		}
 
 		// Size Markers
@@ -10753,11 +10754,10 @@ TL.TimeNav = TL.Class.extend({
 	},
 
 	_drawTimeline: function(fast) {
-		this.timescale = this._getTimeScale();
+		this._renewTimeScale();
 		this.timeaxis.drawTicks(this.timescale, this.options.optimal_tick_width);
 		this._positionMarkers(fast);
 		this._assignRowsToMarkers();
-		this._createGroups();
 		this._positionGroups();
 
 		if (this.has_eras) {
@@ -10771,7 +10771,7 @@ TL.TimeNav = TL.Class.extend({
 
 		// Check to see if redraw is needed
 		if (check_update) {
-			/* keep this aligned with _getTimeScale or reduce code duplication */
+			/* keep this aligned with _renewTimeScale or reduce code duplication */
 			var temp_timescale = new TL.TimeScale(this.config, {
 	            display_width: this._el.container.offsetWidth,
 	            screen_multiplier: this.options.scale_factor,
@@ -10789,7 +10789,7 @@ TL.TimeNav = TL.Class.extend({
 
 		// Perform update or redraw
 		if (do_update) {
-			this.timescale = this._getTimeScale();
+			this._renewTimeScale();
 			this.timeaxis.positionTicks(this.timescale, this.options.optimal_tick_width);
 			this._positionMarkers();
 			this._assignRowsToMarkers();
