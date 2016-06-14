@@ -11939,7 +11939,7 @@ TL.TimeAxis = TL.Class.extend({
 	        second: 'time_short',
 	        minute: 'time_no_seconds_short',
 	        hour: 'time_no_minutes_short',
-	        day: 'full_short',
+	        day: 'day_short',
 	        month: 'month_short',
 	        year: 'year',
 	        decade: 'year',

@@ -63,6 +63,7 @@
     "dateformats": {
         "full_long": "yyyy年m月d日 H時M分s秒", 
         "full_short": "yyyy年m月d日", 
+        "day_short": "m/d", 
         "full": "yyyy年 m月d日 (ddd)", 
         "month_short": "mmm", 
         "time_no_seconds_small_date": "yyyy年 m月d日 (ddd) HH:MM",
