@@ -3463,6 +3463,13 @@ TL.TimelineConfig = TL.Class.extend({
 
     function extractGoogleEntryData_Bisan(item) {
 	var start_date = TL.Date.parseDate(item['gsx$開始日'].$t);
+	if (typeof(start_date.day) === "undefined") {
+	    var _date = new Date();
+	    start_date.year = String(_date.getFullYear());
+	    start_date.month = String(_date.getMonth());
+	    start_date.day = String(_date.getDate());
+	    item['gsx$備考'].$t = "開始日未定\n" + item['gsx$備考'].$t;
+	}
 	item['gsx$year'] = { $t: start_date.year };
 	item['gsx$month'] = { $t: start_date.month };
 	item['gsx$day'] = { $t: start_date.day };
@@ -3492,10 +3499,11 @@ TL.TimelineConfig = TL.Class.extend({
 	}
 	item['gsx$group'] = { $t: item['gsx$ユーザー名'].$t + " " + item['gsx$内容'].$t }
 	item['gsx$text'] = {
-	    $t: '<table rules="all" style="border-width: thin; border-style: solid; border-collapse: collapse;"><tr><th>ユーザー名</th><th>内容</th><th>数量</th><th>備考</th><tr>' +
+	    $t: '<table rules="all" style="border-width: thin; border-style: solid; border-collapse: collapse;"><tr><th>ユーザー名</th><th>内容</th><th>数量</th><th>納期</th><th>備考</th><tr>' +
 		"<tr><td>" + item['gsx$ユーザー名'].$t + "</td>" +
 		"<td>" + item['gsx$内容'].$t + "</td>" +
 		"<td>" + item['gsx$数量'].$t + "</td>" +
+		"<td>" + item['gsx$納期'].$t + "</td>" +
 		"<td><pre>" + item['gsx$備考'].$t + "</pre></td>" +
 		"</tr></table>"
 	}
