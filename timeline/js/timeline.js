@@ -12465,7 +12465,7 @@ TL.Timeline = TL.Class.extend({
 			is_full_embed: 				false,
 			hash_bookmark: false,
 			default_bg_color: 			{r:255, g:255, b:255},
-			scale_factor: 				0.5,						// How many screen widths wide should the timeline be
+			scale_factor: 				1,						// How many screen widths wide should the timeline be
 			layout: 					"landscape",			// portrait or landscape
 			timenav_position: 			"bottom",				// timeline on top or bottom
 			optimal_tick_width: 		60,						// optimal distance (in pixels) between ticks on axis
@@ -12493,12 +12493,15 @@ TL.Timeline = TL.Class.extend({
 			map_type: 					"stamen:toner-lite",
 			slide_padding_lr: 			100,					// padding on slide of slide
 			slide_default_fade: 		"0%",					// landscape fade
-//			zoom_sequence: 				[0.5, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89], // Array of Fibonacci numbers for TimeNav zoom levels
-		    zoom_sequence: 				[0.1, 0.2, 0.5, 2.5], // Array of TimeNav zoom levels [1week, 1month, 3month]
+			zoom_sequence: 				[0.5, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89], // Array of Fibonacci numbers for TimeNav zoom levels
 			language: 					"ja",
 			ga_property_id: 			null,
 			track_events: 				['back_to_start','nav_next','nav_previous','zoom_in','zoom_out' ]
 		};
+		if (global_period <= 3) {
+		    this.options.scale_factor = 1.0;
+		    this.options.zoom_sequence = [0.5, 1, 2, 8]; // Array of TimeNav zoom levels [1week, 1month, 3month, 6month]
+		}
 
 		// Animation Objects
 		this.animator_timenav = null;
