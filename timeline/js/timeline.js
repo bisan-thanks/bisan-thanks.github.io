@@ -3461,52 +3461,56 @@ TL.TimelineConfig = TL.Class.extend({
         return d;
     }
 
-    function extractGoogleEntryData_Bisan(item) {
-	var start_date = TL.Date.parseDate(item['gsx$開始日'].$t);
-	if (typeof(start_date.day) === "undefined") {
-	    var _date = new Date();
-	    start_date.year = String(_date.getFullYear());
-	    start_date.month = String(_date.getMonth());
-	    start_date.day = String(_date.getDate());
-	    item['gsx$備考'].$t = "開始日未定\n" + item['gsx$備考'].$t;
-	}
-	item['gsx$year'] = { $t: start_date.year };
-	item['gsx$month'] = { $t: start_date.month };
-	item['gsx$day'] = { $t: start_date.day };
-	item['gsx$time'] = { $t: item['gsx$開始時刻'].$t };
-	var end_date = TL.Date.parseDate(item['gsx$終了日'].$t);
-	item['gsx$endyear'] = { $t: end_date.year };
-	item['gsx$endmonth'] = { $t: end_date.month };
-	item['gsx$endday'] = { $t: end_date.day };
-	item['gsx$endtime'] = { $t: item['gsx$終了時刻'].$t };
-	item['gsx$headline'] = {
-	    $t: '【' + item['gsx$工程'].$t + '】' +
-		[item['gsx$担当者1'].$t,
-		 item['gsx$担当者2'].$t,
-		 item['gsx$担当者3'].$t,
-		 item['gsx$担当者4'].$t,
-		 item['gsx$担当者5'].$t].map(function(x){
-		     switch (x) {
-		     case '矢野': return '<span style="background: #40FF00;">' + x + "</span>";
-		     case '雅': return '<span style="background: #F7819F;">' + x + "</span>";
-		     case '木口': return '<span style="background: #81BEF7;">' + x + "</span>";
-		     case 'チョン': return '<span style="background: #FAAC58;">' + x + "</span>";
-		     case 'トマソ': return '<span style="background: #F2F5A9;">' + x + "</span>";
-		     case 'サポータ': return '<span style="background: #F4FA58;">' + x + "</span>";
-		     default: return x;
-		     }
-		 }).filter(function(s){return s;}).join(', ')
-	}
-	item['gsx$group'] = { $t: item['gsx$ユーザー名'].$t + " " + item['gsx$内容'].$t }
-	item['gsx$text'] = {
-	    $t: '<table rules="all" style="border-width: thin; border-style: solid; border-collapse: collapse;"><tr><th>ユーザー名</th><th>内容</th><th>数量</th><th>納期</th><th>備考</th><tr>' +
-		"<tr><td>" + item['gsx$ユーザー名'].$t + "</td>" +
-		"<td>" + item['gsx$内容'].$t + "</td>" +
-		"<td>" + item['gsx$数量'].$t + "</td>" +
-		"<td>" + item['gsx$納期'].$t + "</td>" +
-		"<td><pre>" + item['gsx$備考'].$t + "</pre></td>" +
-		"</tr></table>"
-	}
+    function extractGoogleEntryData_Bisan_PeriodicFilter(period) {
+	return function extractGoogleEntryData_Bisan(item) {
+	    var start_date = TL.Date.parseDate(item['gsx$開始日'].$t);
+	    var end_date = TL.Date.parseDate(item['gsx$終了日'].$t);
+	    var today = new Date();
+	    if (typeof(start_date.day) === "undefined") {
+		start_date.year = String(today.getFullYear());
+		start_date.month = String(today.getMonth());
+		start_date.day = String(today.getDate());
+		item['gsx$備考'].$t = "開始日未定\n" + item['gsx$備考'].$t;
+	    }
+	    if (period && new Date(parseInt(start_date.year, 10), parseInt(start_date.month, 10), parseInt(start_date.day, 10)) > new Date(today.getFullYear(), today.getMonth() + period, today.getDate())) {
+		return undefined;
+	    }
+	    item['gsx$year'] = { $t: start_date.year };
+	    item['gsx$month'] = { $t: start_date.month };
+	    item['gsx$day'] = { $t: start_date.day };
+	    item['gsx$time'] = { $t: item['gsx$開始時刻'].$t };
+	    item['gsx$endyear'] = { $t: end_date.year };
+	    item['gsx$endmonth'] = { $t: end_date.month };
+	    item['gsx$endday'] = { $t: end_date.day };
+	    item['gsx$endtime'] = { $t: item['gsx$終了時刻'].$t };
+	    item['gsx$headline'] = {
+		$t: '【' + item['gsx$工程'].$t + '】' +
+		    [item['gsx$担当者1'].$t,
+		     item['gsx$担当者2'].$t,
+		     item['gsx$担当者3'].$t,
+		     item['gsx$担当者4'].$t,
+		     item['gsx$担当者5'].$t].map(function(x){
+			 switch (x) {
+			 case '矢野': return '<span style="background: #40FF00;">' + x + "</span>";
+			 case '雅': return '<span style="background: #F7819F;">' + x + "</span>";
+			 case '木口': return '<span style="background: #81BEF7;">' + x + "</span>";
+			 case 'チョン': return '<span style="background: #FAAC58;">' + x + "</span>";
+			 case 'トマソ': return '<span style="background: #F2F5A9;">' + x + "</span>";
+			 case 'サポータ': return '<span style="background: #F4FA58;">' + x + "</span>";
+			 default: return x;
+			 }
+		     }).filter(function(s){return s;}).join(', ')
+	    }
+	    item['gsx$group'] = { $t: item['gsx$ユーザー名'].$t + " " + item['gsx$内容'].$t }
+	    item['gsx$text'] = {
+		$t: '<table rules="all" style="border-width: thin; border-style: solid; border-collapse: collapse;"><tr><th>ユーザー名</th><th>内容</th><th>数量</th><th>納期</th><th>備考</th><tr>' +
+		    "<tr><td>" + item['gsx$ユーザー名'].$t + "</td>" +
+		    "<td>" + item['gsx$内容'].$t + "</td>" +
+		    "<td>" + item['gsx$数量'].$t + "</td>" +
+		    "<td>" + item['gsx$納期'].$t + "</td>" +
+		    "<td><pre>" + item['gsx$備考'].$t + "</pre></td>" +
+		    "</tr></table>"
+	    }
 /*
 item['gsx$media'] = { $t: item['gsx$'].$t }
 item['gsx$mediacredit'] = { $t: item['gsx$'].$t }
@@ -3515,8 +3519,9 @@ item['gsx$mediathumbnail'] = { $t: item['gsx$'].$t }
 item['gsx$type'] = { $t: item['gsx$'].$t }
 item['gsx$background'] = { $t: item['gsx$'].$t }
 */
-	var d = extractGoogleEntryData_V3(item);
-        return d;
+	    var d = extractGoogleEntryData_V3(item);
+            return d;
+	}
     }
 
     var getGoogleItemExtractor = function(data) {
@@ -3544,7 +3549,9 @@ item['gsx$background'] = { $t: item['gsx$'].$t }
             //     }
             // }
             return extractGoogleEntryData_V3;
-        } else return extractGoogleEntryData_Bisan;
+        } else {
+	    return  extractGoogleEntryData_Bisan_PeriodicFilter(global_period);
+	}
         throw new TL.Error("invalid_data_format_err");
     }
 

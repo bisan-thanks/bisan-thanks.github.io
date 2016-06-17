@@ -39,13 +39,14 @@
     <!-- JavaScript-->
     <script src="js/timeline.js"></script>
     <script>
+      function getURLParameter(name) { return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null; }
+      global_period = parseInt(getURLParameter('m')) || 3;
       var timeline = new TL.Timeline('timeline', '1iQmnm8dh5BERWU4XVB3aIdxNCUO4jxwAI7vkcn8ZQQw', {
         ga_property_id: "UA-27829802-4",
         lang:"ja",
         timenav_position: "top",
         sort_reverse: true,
         debug: true,
-        max_rows: 30,
       });
     </script>
   </body>
