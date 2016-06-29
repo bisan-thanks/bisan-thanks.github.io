@@ -3495,7 +3495,7 @@ TL.TimelineConfig = TL.Class.extend({
 			 case '雅': return '<span style="background: #F7819F;">' + x + "</span>";
 			 case '木口': return '<span style="background: #81BEF7;">' + x + "</span>";
 			 case 'チョン': return '<span style="background: #FAAC58;">' + x + "</span>";
-			 case 'トマソ': return '<span style="background: #F2F5A9;">' + x + "</span>";
+			 case 'トアン': return '<span style="background: #F2F5A9;">' + x + "</span>";
 			 case 'サポータ': return '<span style="background: #F4FA58;">' + x + "</span>";
 			 default: return x;
 			 }
