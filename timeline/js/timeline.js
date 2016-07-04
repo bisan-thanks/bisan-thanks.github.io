@@ -3472,7 +3472,7 @@ TL.TimelineConfig = TL.Class.extend({
 		start_date.day = String(today.getDate());
 		item['gsx$備考'].$t = "開始日未定\n" + item['gsx$備考'].$t;
 	    }
-	    if (period && new Date(parseInt(start_date.year, 10), parseInt(start_date.month, 10), parseInt(start_date.day, 10)) > new Date(today.getFullYear(), today.getMonth() + period, today.getDate())) {
+	    if (period && new Date(parseInt(start_date.year, 10), parseInt(start_date.month, 10), parseInt(start_date.day, 10)) > new Date(today.getFullYear(), today.getMonth() + 1 + period, today.getDate())) {
 		return undefined;
 	    }
 	    item['gsx$year'] = { $t: start_date.year };
