@@ -14,7 +14,7 @@
     <!-- Style-->
     <style>
       html, body {
-      	height:100%;
+      	height:1500px;
       	width:100%;
       	padding: 0px;
       	margin: 0px;
@@ -48,6 +48,10 @@
         sort_reverse: true,
         debug: true,
       });
+      function focusBottom() { window.scrollTo(0, document.body.scrollHeight); }
+      if (window.addEventListener) { window.addEventListener('load', focusBottom, false); }
+      else if (window.attachEvent) { window.attachEvent('onload', focusBottom); }
+      else { window.onload = focusBottom; }
     </script>
   </body>
 </html>
