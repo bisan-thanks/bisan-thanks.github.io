@@ -3466,11 +3466,13 @@ TL.TimelineConfig = TL.Class.extend({
 	    var start_date = TL.Date.parseDate(item['gsx$開始日'].$t);
 	    var end_date = TL.Date.parseDate(item['gsx$終了日'].$t);
 	    var today = new Date();
-	    if (typeof(start_date.day) === "undefined") {
+	    if (typeof(start_date.day) === "undefined" || new Date(start_date.year, start_date.month - 1, start_date.day, 0, 0, 0).getTime() < today.getTime()) {
 		start_date.year = String(today.getFullYear());
 		start_date.month = String(today.getMonth());
 		start_date.day = String(today.getDate());
-		item['gsx$備考'].$t = "開始日未定\n" + item['gsx$備考'].$t;
+		if (typeof(start_date.day) === "undefined") {
+		    item['gsx$備考'].$t = "開始日未定\n" + item['gsx$備考'].$t;
+		}
 	    }
 	    if (period && new Date(parseInt(start_date.year, 10), parseInt(start_date.month, 10), parseInt(start_date.day, 10)) > new Date(today.getFullYear(), today.getMonth() + 1 + period, today.getDate())) {
 		return undefined;
