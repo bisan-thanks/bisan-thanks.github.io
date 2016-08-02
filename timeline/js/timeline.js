@@ -3468,7 +3468,7 @@ TL.TimelineConfig = TL.Class.extend({
 	    var today = new Date();
 	    if (typeof(start_date.day) === "undefined" || new Date(start_date.year, start_date.month - 1, start_date.day, 0, 0, 0).getTime() < today.getTime()) {
 		start_date.year = String(today.getFullYear());
-		start_date.month = String(today.getMonth());
+		start_date.month = String(today.getMonth()+1);
 		start_date.day = String(today.getDate());
 		if (typeof(start_date.day) === "undefined") {
 		    item['gsx$備考'].$t = "開始日未定\n" + item['gsx$備考'].$t;
